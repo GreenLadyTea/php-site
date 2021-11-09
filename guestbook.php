@@ -28,6 +28,9 @@ if (isset($_POST['name']) && isset($_POST['message'])) {
     $name_field = $_POST['name'];
     $message_field = $_POST['message'];
 
+    $name_field = htmlspecialchars($name_field, ENT_HTML5);
+    $message_field = htmlspecialchars($message_field, ENT_HTML5);
+
     $info = $name_field . ":" . $message_field . "\n";
     file_put_contents($filename, $info, FILE_APPEND);
 }
