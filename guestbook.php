@@ -21,35 +21,17 @@ $current_page = [
     <button type="submit">Отправить</button>
 </form>
 <?php
+require_once './record.php';
 
 $filename = 'data.txt';
 
 if (isset($_POST['name']) && isset($_POST['message'])) {
     $name_field = $_POST['name'];
     $message_field = $_POST['message'];
-
-    $name_field = htmlspecialchars($name_field, ENT_HTML5);
-    $message_field = htmlspecialchars($message_field, ENT_HTML5);
-
-    $info = $name_field . ":" . $message_field . "\n";
-    file_put_contents($filename, $info, FILE_APPEND);
+    write_record($filename, $name_field, $message_field);
 }
 
-$file = file_get_contents($filename);
-$strings = explode("\n", $file);
-$strings = array_reverse($strings);
-$messages = [];
-foreach ($strings as $string) {
-    $pair = explode(":", $string);
-    //print_r($pair);
-    if (count($pair) === 1) {
-        continue;
-    }
-    $messages[] = [
-            "name" => $pair[0],
-            "message" => $pair[1],
-    ];
-}
+$messages = get_records($filename);
 
 ?>
 <ul>
