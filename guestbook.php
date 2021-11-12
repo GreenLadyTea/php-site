@@ -3,17 +3,13 @@ $current_page = [
     "page" => "guestbook",
     "title" => "Гостевая книга"
 ];
+require_once './partials/header.php';
+require_once './partials/navigation-bar.php';
 ?>
-<?php require_once './partials/header.php'; ?>
-<?php require_once './partials/navigation-bar.php' ?>
 <h3>
     Это гостевая книга
 </h3>
 <form action="guestbook.php" method="POST">
-    <label>
-        Имя
-        <input type="text" name="name"/>
-    </label>
     <label>
         Сообщение
         <textarea name="message"></textarea>
@@ -21,12 +17,11 @@ $current_page = [
     <button type="submit">Отправить</button>
 </form>
 <?php
-require_once './record.php';
+require_once './db.php';
 
-if (isset($_POST['name']) && isset($_POST['message'])) {
-    $name_field = $_POST['name'];
+if (isset($_POST['message'])) {
     $message_field = $_POST['message'];
-    write_record($name_field, $message_field);
+    write_record($message_field);
 }
 
 $messages = get_records();

@@ -4,3 +4,6 @@
 <a href="../guestbook.php" class="<?=$current_page["page"] === "guestbook" ? "active" : ""?>">
     Гостевая книга
 </a>
+<a href="../auth.php" class="<?=$current_page["page"] === "auth" ? "active" : ""?>">
+    Авторизация
+</a>
