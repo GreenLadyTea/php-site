@@ -23,15 +23,13 @@ $current_page = [
 <?php
 require_once './record.php';
 
-$filename = 'data.txt';
-
 if (isset($_POST['name']) && isset($_POST['message'])) {
     $name_field = $_POST['name'];
     $message_field = $_POST['message'];
-    write_record($filename, $name_field, $message_field);
+    write_record($name_field, $message_field);
 }
 
-$messages = get_records($filename);
+$messages = get_records();
 
 ?>
 <ul>
@@ -40,7 +38,8 @@ $messages = get_records($filename);
         ?>
         <li>
             <b><?=$message["name"];?></b>:
-            <?=$message["message"];?>
+            <?=$message["message"];?>,
+            <?=$message["date"]?>
         </li>
         <?php
     }

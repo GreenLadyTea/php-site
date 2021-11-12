@@ -1,29 +1,29 @@
 <?php
+$config = require_once('config.php');
+$link = new MySQLi($config["host"], $config["user"], $config["password"], $config["db"]);
+if ($link->connect_error) {
+    die('<p style="color:red">'.$link->connect_errno.' - '.$link->connect_error.'</p>');
+}
+$link->query("SET NAMES utf8");
 
-function write_record($filename, $name_field, $message_field) {
+function write_record($name_field, $message_field) {
+    global $link;
     $name_field = htmlspecialchars($name_field, ENT_HTML5);
     $message_field = htmlspecialchars($message_field, ENT_HTML5);
-
-    $info = $name_field . ":" . $message_field . "\n";
-    file_put_contents($filename, $info, FILE_APPEND);
+    $link->query("INSERT INTO Messages VALUES (null, '$name_field', '$message_field', CURRENT_TIMESTAMP())");
 }
 
-function get_records($filename): array
+function get_records(): array
 {
+    global $link;
+    $result = $link->query("SELECT * FROM Messages");
     $messages = [];
-    $file = file_get_contents($filename);
-    $strings = explode("\n", $file);
-    $strings = array_reverse($strings);
-
-    foreach ($strings as $string) {
-        $pair = explode(":", $string);
-        if (count($pair) === 1) {
-            continue;
-        }
+    while ($row = $result->fetch_row()) {
         $messages[] = [
-            "name" => $pair[0],
-            "message" => $pair[1],
+            "name" => $row[1],
+            "message" => $row[2],
+            "date" => $row[3]
         ];
     }
-    return $messages;
+    return array_reverse($messages);
 }
