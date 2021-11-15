@@ -3,6 +3,12 @@ $current_page = [
     "page" => "guestbook",
     "title" => "Гостевая книга"
 ];
+require_once './db.php';
+
+if(!check_authentication()) {
+    header("Location: http://" . $_SERVER ['HTTP_HOST'] . dirname($_SERVER ['PHP_SELF']) . "/index.php");
+}
+
 require_once './partials/header.php';
 require_once './partials/navigation-bar.php';
 ?>
@@ -17,8 +23,6 @@ require_once './partials/navigation-bar.php';
     <button type="submit">Отправить</button>
 </form>
 <?php
-require_once './db.php';
-
 if (isset($_POST['message'])) {
     $message_field = $_POST['message'];
     write_record($message_field);
@@ -32,9 +36,9 @@ $messages = get_records();
     foreach ($messages as $message) {
         ?>
         <li>
-            <b><?=$message["name"];?></b>:
+            <b><?=$message["username"];?></b>:
             <?=$message["message"];?>,
-            <?=$message["date"]?>
+            <?=$message["creation_date"]?>
         </li>
         <?php
     }

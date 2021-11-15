@@ -2,8 +2,8 @@
 require_once './db.php';
 
 $current_page = [
-    "page" => "auth",
-    "title" => "Авторизация"
+    "page" => "registration",
+    "title" => "Регистрация"
 ];
 
 $error_message = "";
@@ -11,20 +11,19 @@ $error_message = "";
 if (isset($_POST['name']) && isset($_POST['password'])) {
     $username = $_POST['name'];
     $password = $_POST['password'];
-    if (authenticate($username, $password)) {
-        header("Location: http://" . $_SERVER ['HTTP_HOST'] . dirname($_SERVER ['PHP_SELF']) . "/index.php");
+    if(register($username, $password)) {
+        header("Location: http://" . $_SERVER ['HTTP_HOST'] . dirname($_SERVER ['PHP_SELF']) . "/auth.php");
         exit;
     }
-    $error_message = "Не удалось авторизоваться";
+    $error_message = "Не удалось зарегистрироваться";
 }
 
 require_once './partials/header.php';
 require_once './partials/navigation-bar.php';
 ?>
-
-<h3>Авторизация</h3>
+<h3>Регистрация</h3>
 <?=$error_message?>
-<form action="auth.php" method="post">
+<form action="registration.php" method="post">
     <label>
         Ник
         <input type="text" name="name"/>
