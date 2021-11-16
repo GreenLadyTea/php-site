@@ -1,29 +1,31 @@
 <?php
 session_start();
+$config = require_once './config.php';
 try {
-    $db = new PDO('mysql:host=localhost;dbname=messagesdb', 'root', '');
+    $db = new PDO('mysql:host=' . $config["host"] . ';dbname=' . $config["db"], $config["user"], $config["password"]);
 }
 catch (PDOException $e) {
    die("Connection failed: " . $e->getMessage());
 }
 
-function authenticate($username, $password) {
+function authenticate($username, $password): string {
     global $db;
     $statement = $db->prepare("SELECT id, password FROM Users WHERE username = :username");
     $statement->execute(["username" => $username]);
     $result = $statement->fetch();
     if($result === false) {
-        return false;
+        return 'Нет такого пользователя';
     }
     if(md5($password) === $result["password"]) {
         $_SESSION["id"] = $result["id"];
-        return true;
+        return '';
     }
+    return 'Неправильный пароль';
 }
 
 function register($username, $password): bool {
     global $db;
-    $statement = $db->prepare("INSERT INTO users (username, password) VALUES (:username, md5(:password))");
+    $statement = $db->prepare("INSERT INTO Users (username, password) VALUES (:username, md5(:password))");
     try {
         $statement->execute(["username" => $username, "password" => $password]);
         return true;
@@ -43,14 +45,14 @@ function check_authentication(): bool
 
 function write_record($message) {
     global $db;
-    $statement = $db->prepare("INSERT INTO messages (message, user_id) VALUES (:message, :user_id)");
+    $statement = $db->prepare("INSERT INTO Messages (message, user_id) VALUES (:message, :user_id)");
     $statement->execute(["message" => $message, "user_id" => $_SESSION["id"]]);
 }
 
 function get_records(): array
 {
     global $db;
-    $statement = $db->prepare("SELECT * FROM messages INNER JOIN users ON messages.user_id = Users.id");
+    $statement = $db->prepare("SELECT * FROM Messages INNER JOIN Users ON Messages.user_id = Users.id");
     $statement->execute();
     $result = $statement->fetchAll(PDO::FETCH_ASSOC);
     return array_reverse($result);

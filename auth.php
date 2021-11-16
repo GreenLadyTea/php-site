@@ -11,11 +11,13 @@ $error_message = "";
 if (isset($_POST['name']) && isset($_POST['password'])) {
     $username = $_POST['name'];
     $password = $_POST['password'];
-    if (authenticate($username, $password)) {
+    $session = authenticate($username, $password);
+    if ($session === '') {
         header("Location: http://" . $_SERVER ['HTTP_HOST'] . dirname($_SERVER ['PHP_SELF']) . "/index.php");
         exit;
+    } else {
+        $error_message = $session;
     }
-    $error_message = "Не удалось авторизоваться";
 }
 
 require_once './partials/header.php';
