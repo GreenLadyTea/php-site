@@ -4,6 +4,7 @@ $current_page = [
     "title" => "Гостевая книга"
 ];
 require_once './db.php';
+require_once './session.php';
 
 if(!check_authentication()) {
     header("Location: http://" . $_SERVER ['HTTP_HOST'] . dirname($_SERVER ['PHP_SELF']) . "/index.php");
@@ -39,6 +40,10 @@ $messages = get_records();
             <b><?=$message["username"];?></b>:
             <?=$message["message"];?>,
             <?=$message["creation_date"]?>
+            <?php if(check_admin_rights() || $message["id"] === $_SESSION["user"]["id"]) {
+            ?>
+            <a href="delete_message.php?message_id=<?=$message["message_id"]?>">[x]</a>
+            <?php } ?>
         </li>
         <?php
     }

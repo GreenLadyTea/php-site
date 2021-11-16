@@ -10,14 +10,14 @@ catch (PDOException $e) {
 
 function authenticate($username, $password): string {
     global $db;
-    $statement = $db->prepare("SELECT id, password FROM Users WHERE username = :username");
+    $statement = $db->prepare("SELECT * FROM Users WHERE username = :username");
     $statement->execute(["username" => $username]);
     $result = $statement->fetch();
     if($result === false) {
         return 'Нет такого пользователя';
     }
     if(md5($password) === $result["password"]) {
-        $_SESSION["id"] = $result["id"];
+        $_SESSION["user"] = $result;
         return '';
     }
     return 'Неправильный пароль';
@@ -40,20 +40,34 @@ function log_out() {
 
 function check_authentication(): bool
 {
-    return isset($_SESSION["id"]);
+    return isset($_SESSION["user"]["id"]);
 }
 
 function write_record($message) {
     global $db;
     $statement = $db->prepare("INSERT INTO Messages (message, user_id) VALUES (:message, :user_id)");
-    $statement->execute(["message" => $message, "user_id" => $_SESSION["id"]]);
+    $statement->execute(["message" => $message, "user_id" => $_SESSION["user"]["id"]]);
 }
 
 function get_records(): array
 {
     global $db;
-    $statement = $db->prepare("SELECT * FROM Messages INNER JOIN Users ON Messages.user_id = Users.id");
+    $statement = $db->prepare("
+        SELECT
+            Messages.id as message_id,
+            Messages.creation_date,
+            Messages.message,
+            Users.id, Users.username
+        FROM Messages 
+        INNER JOIN Users ON Messages.user_id = Users.id
+        ORDER BY Messages.creation_date");
     $statement->execute();
     $result = $statement->fetchAll(PDO::FETCH_ASSOC);
     return array_reverse($result);
+}
+
+function delete_record($message_id) {
+    global $db;
+    $statement = $db->prepare("DELETE FROM Messages WHERE id=:id");
+    $statement->execute(["id" => $message_id]);
 }
