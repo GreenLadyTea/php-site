@@ -20,7 +20,7 @@ if(!$isAuthenticated) { ?>
 <?php
 }
 else { ?>
-<span><?=get_username()?></span>
+<a href="../profile.php" class="<?=$current_page["page"] === "profile" ? "active" : "" ?>"><?=get_username()?></a>
 <a href="../logout.php">
     Выйти
 </a>

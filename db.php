@@ -1,6 +1,6 @@
 <?php
 session_start();
-$config = require_once './config.php';
+$config = require_once './config/config.php';
 try {
     $db = new PDO('mysql:host=' . $config["host"] . ';dbname=' . $config["db"], $config["user"], $config["password"]);
 }
@@ -70,4 +70,10 @@ function delete_record($message_id) {
     global $db;
     $statement = $db->prepare("DELETE FROM Messages WHERE id=:id");
     $statement->execute(["id" => $message_id]);
+}
+
+function delete_all_records($user_id) {
+    global $db;
+    $statement = $db->prepare("DELETE FROM Messages WHERE user_id=:user_id");
+    $statement->execute(["user_id" => $user_id]);
 }
