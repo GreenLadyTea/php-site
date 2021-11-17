@@ -77,3 +77,10 @@ function delete_all_records($user_id) {
     $statement = $db->prepare("DELETE FROM Messages WHERE user_id=:user_id");
     $statement->execute(["user_id" => $user_id]);
 }
+
+function get_users(): array {
+    global $db;
+    $statement = $db->prepare("SELECT Users.id, Users.username FROM Users");
+    $statement->execute();
+    return $statement->fetchAll();
+}
