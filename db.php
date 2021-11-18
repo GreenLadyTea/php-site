@@ -84,3 +84,12 @@ function get_users(): array {
     $statement->execute();
     return $statement->fetchAll();
 }
+
+function get_number_of_records_of_user($user_id)
+{
+    global $db;
+    $statement = $db->prepare("SELECT SUM(user_id=:user_id) AS counter FROM Messages;");
+    $statement->execute(["user_id"=> $user_id]);
+    $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+    return $result[0]["counter"];
+}

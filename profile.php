@@ -21,7 +21,8 @@ if(check_admin_rights()) {?>
         foreach ($users as $user) {
         ?>
             <li>
-                <b><?=$user["username"];?></b>:
+                <b><?=$user["username"];?></b>: Всего
+                <span><?=get_number_of_records_of_user($user["id"])?> сообщений</span>
                 <a href="delete_all_messages.php?user_id=<?=$user["id"]?>">Удалить все сообщения пользователя</a>
             </li>
             <?php } ?>
@@ -30,3 +31,5 @@ if(check_admin_rights()) {?>
 } else {?>
     <a href="delete_all_messages.php?user_id=<?=get_user_id()?>">Удалить все мои сообщения</a>
 <?php } ?>
+
+<?php require_once './partials/footer.php'; ?>
