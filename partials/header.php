@@ -7,8 +7,11 @@
 </head>
 <body>
 <div class="wrapper">
-    <header>
-    <h1>Моя страница</h1>
-    <img src="../public/cat.png" alt="cat" height="85" width="98"/>
+    <header class="header">
+        <div class="logo">
+            <img src="../public/cat.png" alt="cat" height="85" width="98"/>
+        </div>
+        <div class="name">
+            <h1>Сайтик</h1>
+        </div>
     </header>
-    <div class="content">

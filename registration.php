@@ -21,6 +21,7 @@ if (isset($_POST['name']) && isset($_POST['password'])) {
 require_once './partials/header.php';
 require_once './partials/navigation-bar.php';
 ?>
+<div class="window">
 <h3>Регистрация</h3>
 <?=$error_message?>
 <form action="registration.php" method="post">
@@ -34,7 +35,7 @@ require_once './partials/navigation-bar.php';
     </label>
     <button type="submit">Отправить</button>
 </form>
-
+</div>
 <?php
 require_once './partials/footer.php';
 ?>

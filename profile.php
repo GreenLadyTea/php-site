@@ -9,6 +9,7 @@ require_once './session.php';
 require_once './partials/header.php';
 require_once './partials/navigation-bar.php';
 ?>
+<div>
 <div>Добро пожаловать, <?=get_username()?>!</div>
 <?php
 if(check_admin_rights()) {?>
@@ -31,5 +32,6 @@ if(check_admin_rights()) {?>
 } else {?>
     <a href="delete_all_messages.php?user_id=<?=get_user_id()?>">Удалить все мои сообщения</a>
 <?php } ?>
+</div>
 
 <?php require_once './partials/footer.php'; ?>

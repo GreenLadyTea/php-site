@@ -3,6 +3,8 @@ require_once './db.php';
 require_once './session.php';
 $isAuthenticated = check_authentication();
 ?>
+<div class="main">
+<div class="nav">
 <a href="../index.php" class="<?=$current_page["page"] === "main" ? "active" : ""?>">
     Главная
 </a>
@@ -27,3 +29,5 @@ else { ?>
 <?php
 }
 ?>
+</div>
+<div class="content">
